@@ -1,9 +1,6 @@
-//Usage: quoteclient <server-fifo-filename>
-//
-//create own named pipe (fifo) and set permissions
-//send this fifo name to server
-//open own named pipe
-//read the quote and display
+// Usage: quoteclient <server-fifo-filename>
+// This program establishes a client-side connection to a server using named pipes (FIFOs).
+// It creates its own named pipe, sends its pipe name to the server, and reads and displays the received quote.
 
 #include <stdio.h>
 #include <string.h>
@@ -16,25 +13,29 @@
 #define MAXLEN 1000
 
 int main(int argc, char *argv[]) {	
-	if (argc !=2) {
+	if (argc != 2) {
+		// Display correct usage if the command-line arguments are not provided
 		puts("Usage: quoteclient <server-fifo-name>");
 		exit(1);
 	}
 
-	// argv[1] is the server fifo name
-
+	// Construct the client's named pipe (FIFO) name using process and user information
     char clientfifo[MAXLEN];
 	sprintf(clientfifo, "/tmp/%s-%d", getenv("USER"), getpid());
+
+	// Create the client's named pipe with specified permissions
 	mkfifo(clientfifo, 0600);
 	chmod(clientfifo, 0622);
 	
-	//open argv[1] for writing, send clientfifo
+	// Open the server's named pipe for writing and send the client's named pipe name
 	FILE *fp = fopen(argv[1], "w");
 	fputs(clientfifo, fp);
 	fclose(fp);
-	//open clientfifo for reading and read the quote & print in the screen - improve your life! :-)
-	FILE *quotefp = fopen(clientfifo, "r");
-	//read the quote!
 
+	// Open the client's named pipe for reading and read the received quote, then print it on the screen
+	FILE *quotefp = fopen(clientfifo, "r");
+	// Read the quote from the named pipe
+
+	// Remove the client's named pipe after communication is done
 	unlink(clientfifo);
 }

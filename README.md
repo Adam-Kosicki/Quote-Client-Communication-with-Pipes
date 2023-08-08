@@ -1,2 +1,2 @@
-# Quote-Server-using-Named-Pipes
+# Quote-Client-Communication-with-Pipes
 This project implements a motivational quote server using named pipes for inter-process communication. The quoteserver.c program reads quotes from a file and responds to client requests sent via named pipes. The quoteclient.c program connects to the server, requests a quote, and displays it. Named pipes enable communication between unrelated processes, making it suitable for scenarios where processes aren't directly parent-child related. This implementation offers a way for clients to receive random motivational quotes from the server using named pipes, enhancing motivation and inspiration.
